@@ -270,6 +270,10 @@ jekyll-archives:
   permalinks:
     category: /categories/:name/
     tag: /tags/:name/
+categories:
+  - Kubernetes
+  - Docker
+  - DevOps
 # https://github.com/jekyll/jekyll-archives
 # jekyll-archives:
 #   enabled:
