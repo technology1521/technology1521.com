@@ -313,4 +313,6 @@ comments:
   provider: "disqus"
   disqus:
     shortname: "zhuangzhuangwang"
-  
+collections:
+  categories:
+    output: true  
