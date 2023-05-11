@@ -9,7 +9,11 @@ layout: archive
   {% include posts-category.html taxonomy=page.taxonomy type=entries_layout %}
 </div>
 
+
 ---
-layout: default
+layout: archive-taxonomy
+type: categories
+title: "{{ page.title | capitalize }}"
+permalink: "{{ page.url }}"
+taxonomy: categories
 ---
-{% include archive.html %}
