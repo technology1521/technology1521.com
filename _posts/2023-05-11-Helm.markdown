@@ -2,7 +2,7 @@
 layout: single
 title:  "Helm介绍"
 date:   2023-05-11 23:42:51 +0800
-categories: Kubernetes
+categories: jekyll update
 tag： Kubernetes
 ---
 

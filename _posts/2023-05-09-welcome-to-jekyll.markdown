@@ -3,7 +3,7 @@
 layout: single
 title:  "Welcome to Jekyll!"
 date:   2023-05-09 23:42:51 +0800
-categories: 0
+categories: jekyll update
 classes: wide
 toc: true
 excerpt: "This post should display a **header with an overlay image**, if the theme supports it."
