@@ -5,7 +5,6 @@ date:   2023-05-11 23:42:51 +0800
 categories:  jekyll update
 
 ---
-
 当我们使用Kubernetes部署应用程序时，通常需要编写大量的Kubernetes资源清单来定义应用程序的各种组件和依赖关系。这些资源清单包括Pod、Service、Deployment、ConfigMap等。当我们需要部署和管理多个应用程序时，这些资源清单的编写和管理变得更加困难。
 
 Helm是Kubernetes的官方包管理器，它提供了一种方便的方法来安装、升级和卸载Kubernetes应用程序。Helm使用chart来描述Kubernetes应用程序的安装包，其中包括应用程序的所有依赖项、配置和部署信息。
