@@ -271,7 +271,7 @@ jekyll-archives:
     category: /categories/:name/
     tag: /tags/:name/
 categories:
-  - Kubernetes
+  - kubernetes
   - Docker
   - DevOps
 # https://github.com/jekyll/jekyll-archives
