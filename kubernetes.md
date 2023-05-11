@@ -2,9 +2,9 @@
 
 layout: category 
 
-title: "Kubernetes" 
+title: "kubernetes" 
 
-permalink:  /Kubernetes/index.html
+permalink:  /kubernetes/index.html
 
 category: Kubernetes 
 
