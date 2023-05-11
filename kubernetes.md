@@ -4,7 +4,7 @@ layout: category
 
 title: "kubernetes" 
 
-# permalink:  /categories/#kubernetes/index.html
+permalink:  /categories/#kubernetes/index.html
 
 category: Kubernetes 
 
