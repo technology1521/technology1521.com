@@ -1,0 +1,11 @@
+{% assign posts = site.categories[include.type] %}
+
+{% if posts.size > 0 %}
+  <div class="entries-{{ include.type }} archive-list">
+    {% for post in posts %}
+      {% include archive-single.html type=include.type %}
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted">{{ "No posts found." | t }}</p>
+{% endif %}
