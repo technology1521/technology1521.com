@@ -4,6 +4,15 @@ layout: single
 title:  "Welcome to Jekyll!"
 date:   2023-05-09 23:42:51 +0800
 categories: jekyll update
+classes: wide
+toc: true
+excerpt: "This post should display a **header with an overlay image**, if the theme supports it."
+header:
+  overlay_image: /assets/images/android-chrome-192x192.png
+  caption: "Photo credit"
+  actions:
+    - label: "text"
+      # url: "https://unsplash.com"
 ---
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 

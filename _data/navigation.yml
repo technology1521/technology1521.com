@@ -1,18 +1,18 @@
 # main links
 main:
-  - title: About Me
+  - title: "About Me"
     url: /About Me/
-  - title: python
+  - title: "python"
     url: /python/
-  - title: go
+  - title: "go"
     url: /go/
-  - title: c
+  - title: "c"
     url: /c/
-  - title: kuernetes
+  - title: "kuernetes"
     url: /kuernetes/
-  - title: linux
+  - title: "linux"
     url: /linux/
-  - title: Blogs
+  - title: "Blogs"
     url: /Blogs/
   #- title: "About Me"
   #  url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
