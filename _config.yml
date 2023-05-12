@@ -308,14 +308,12 @@ defaults:
       share: true
       related: true
 collections:
-  categories:
+  kubernetes：
     output: true
-    permalink: /categories/:name/
-
-      
-
-     
-    
+    permalink: /kubernetes/:path/
+  docker:
+    output: true
+    permalink: /docker/:path/
     
     
     
