@@ -311,9 +311,19 @@ collections:
   kubernetes:
     output: true
     permalink: /kubernetes/:path/
+  python:
+    output: true
+    permalink: /python/:path/
+  go:
+    output: true
+    permalink: /go/:path/
+  linux:
+    output: true
+    permalink: /linux/:path/
   docker:
     output: true
     permalink: /docker/:path/
+
     
     
     
