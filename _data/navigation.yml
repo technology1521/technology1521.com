@@ -2,20 +2,16 @@
 main:
   - title: "About Me"
     url: /About Me/
-  - title: "language"
-    url: /categories/#language/
-    children:
-      - title: "python"
-        url: /categories/#python/
-      - title: "go"
-        url: /categories/#go/
-      - title: "c"
-        url: /categories/#c/
+  - title: "python"
+    url: /categories/#python/
+  - title: "go"
+    url: /categories/#go/
+  - title: "c"
+    url: /categories/#c/
   - title: "linux"
     url: /categories/#linux/
-    children:
-      - title: "kubernetes"
-        url: /categories/#kubernetes/
+  - title: "kubernetes"
+    url: /categories/#kubernetes/
   - title: "Blogs"
     url: /Blogs/
   #- title: "About Me"
