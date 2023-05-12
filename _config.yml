@@ -318,7 +318,7 @@ collections:
     output: true  
     permalink: /:collection/:name/
     
- defaults:
+defaults:
   # _portfolio
   - scope:
       path: ""
