@@ -314,7 +314,7 @@ comments:
   disqus:
     shortname: "zhuangzhuangwang"
 collections:
-  portfolio:
+  kubernetes:
     output: true  
     permalink: /:collection/:name/
     
@@ -322,7 +322,7 @@ defaults:
   # _portfolio
   - scope:
       path: ""
-      type: portfolio
+      type: kubernetes
     values:
       layout: single
       author_profile: false
