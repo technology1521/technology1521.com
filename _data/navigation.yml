@@ -11,7 +11,7 @@ main:
         url: /categories/#go/
       - title: "c"
         url: /categories/#c/
-   - title: "linux"
+  - title: "linux"
     url: /categories/#linux/
     children:
       - title: "kubernetes"
