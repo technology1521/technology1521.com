@@ -10,6 +10,8 @@ main:
     url: /c/
   - title: "kubernetes"
     url: /kubernetes/
+  - title: "Categories"
+    url: "/categories/"
   - title: "linux"
     url: /linux/
   - title: "Blogs"
