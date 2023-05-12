@@ -160,6 +160,7 @@ footer:
 include:
   - .htaccess
   - _pages
+  - "_categories"
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
@@ -309,24 +310,36 @@ defaults:
       comments:  true
       share: true
       related: true
-comments:
-  provider: "disqus"
-  disqus:
-    shortname: "zhuangzhuangwang"
 collections:
-  kubernetes:
-    output: true  
-    permalink: /kubernetes/:name/
-    
+  categories:
+    output: true
+    permalink: /categories/:name/
 defaults:
-  # _portfolio
   - scope:
       path: ""
-      type: kubernetes
+      type: "categories"
     values:
-      layout: single
-      author_profile: false
-      share: true
+      layout: "category_archive"
+# comments:
+  # provider: "disqus"
+  # disqus:
+    # shortname: "zhuangzhuangwang"
+# collections:
+  # kubernetes:
+    # output: true  
+    # permalink: /kubernetes/:name/
+    
+# defaults:
+  # # _portfolio
+  # - scope:
+      # path: ""
+      # type: kubernetes
+    # values:
+      # layout: single
+      # author_profile: false
+      # share: true
+      
+
      
     
     
