@@ -3,17 +3,17 @@ main:
   - title: "About Me"
     url: /About Me/
   - title: "python"
-    url: /python/
+    url: /categories/#python/
   - title: "go"
-    url: /go/
+    url: /categories/#go/
   - title: "c"
-    url: /c/
+    url: /categories/#c/
   - title: "kubernetes"
     url: /categories/#kubernetes/
-  - title: "Categories"
-    url: "/categories/"
+#  - title: "Categories"
+#    url: "/categories/"
   - title: "linux"
-    url: /linux/
+    url: /categories/#linux/
   - title: "Blogs"
     url: /Blogs/
   #- title: "About Me"
