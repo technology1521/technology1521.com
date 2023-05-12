@@ -1,4 +1,3 @@
-```
 ---
 title: kubernetes
 layout: collection
@@ -7,4 +6,3 @@ collection: kubernetes
 entries_layout: grid
 classes: wide
 ---
-```
