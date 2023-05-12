@@ -1,9 +1,9 @@
 ```
 ---
-title: Portfolio
+title: kubernetes
 layout: collection
-permalink: /portfolio/
-collection: portfolio
+permalink: /kubernetes/
+collection: kubernetes
 entries_layout: grid
 classes: wide
 ---
