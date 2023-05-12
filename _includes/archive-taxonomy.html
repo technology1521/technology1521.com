@@ -1,0 +1,33 @@
+{% assign current_taxonomy = page.taxonomy | default: include.taxonomy %}
+
+<div class="archive-wrap">
+  {% include archive-header.html %}
+
+  {% if site.data.ui-text[site.locale].tag_layout == "list" %}
+    <div class="post-list">
+      {% for tag in site[current_taxonomy] %}
+        {% assign tag_name = tag[0] %}
+        {% assign tag_posts = tag[1] %}
+        {% if tag_name != "all" %}
+          {% capture tag_path %}/{{ current_taxonomy }}/{{ tag_name | slugify }}/index.html{% endcapture %}
+          {% include archive-single.html type="grid" %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    {% assign tags = site[current_taxonomy] %}
+
+    <div class="grid__wrapper{% if site.data.ui-text[site.locale].tag_layout == "masonry" %} masonry{% endif %}">
+      {% for tag in tags %}
+        {% assign tag_name = tag[0] %}
+        {% assign tag_posts = tag[1] %}
+        {% if tag_name != "all" %}
+          {% capture tag_path %}/{{ current_taxonomy }}/{{ tag_name | slugify }}/index.html{% endcapture %}
+          {% include archive-single.html type="grid" %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% include pagination.html %}
+</div>
