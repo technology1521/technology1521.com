@@ -308,7 +308,7 @@ defaults:
       share: true
       related: true
 collections:
-  kubernetes：
+  kubernetes:
     output: true
     permalink: /kubernetes/:path/
   docker:
