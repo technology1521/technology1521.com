@@ -316,7 +316,7 @@ comments:
 collections:
   kubernetes:
     output: true  
-    permalink: /:collection/:name/
+    permalink: /kubernetes/:name/
     
 defaults:
   # _portfolio
