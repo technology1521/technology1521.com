@@ -8,10 +8,8 @@ main:
     url: /go/
   - title: "c"
     url: /c/
-  - title: Categories
-    url: /categories/
-  #- title: "kubernetes"
-  #  url: /categories/\#kubernetes/
+  - title: "kubernetes"
+    url: /kubernetes/
   - title: "linux"
     url: /linux/
   - title: "Blogs"
