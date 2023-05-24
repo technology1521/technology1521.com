@@ -1,4 +1,4 @@
-﻿---
+---
 layout:  single
 title:  "kubernetes1.27 kuberadm方式安装全过程"
 date:   2023-05-24 
