@@ -515,7 +515,353 @@ mv cfssl-certinfo /usr/bin/cfssl-certinfo #移动
 
 
 
+#下载地址： https://storage.googleapis.com/kubernetes-release/release/v1.19.14/kubernetes-server-linux-amd64.tar.gz
 
+[kubernetes-v1.19.14-server-linux-amd64.tar.gz](https://technology1521.github.io/technology1521.com/soft/kubernetes-v1.19.14-server-linux-amd64.tar.gz)
+
+
+
+下载二进制文件
+
+```shell
+#创建目录
+[root@k8s-master1 ~]# mkdir -p /opt/kubernetes/{bin,cfg,ssl,logs}
+
+#解压二进制包
+[root@k8s-master1 ~]# tar -zxf kubernetes-v1.19.14-server-linux-amd64.tar.gz
+
+#拷贝
+[root@k8s-master1 ~]# cd kubernetes/server/bin
+[root@k8s-master1 bin]# cp kube-apiserver kube-scheduler kube-controller-manager /opt/kubernetes/bin
+[root@k8s-master1 bin]# cp kubectl /usr/bin/
+```
+
+### 4、部署kube-apiserver
+
+```shell
+#创建配置文件
+[root@k8s-master1 bin]# vim /opt/kubernetes/cfg/kube-apiserver.conf
+KUBE_APISERVER_OPTS="--logtostderr=false \
+--v=2 \
+--log-dir=/data/logs/kubernetes/kube-apiserver \
+--etcd-servers=https://10.102.4.13:2379,https://10.102.4.14:2379,https://10.102.4.15:2379 \
+--bind-address=10.102.4.13 \
+--secure-port=6443 \
+--advertise-address=10.102.4.13 \
+--allow-privileged=true \
+--service-cluster-ip-range=10.96.0.0/16 \
+--enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,ResourceQuota,NodeRestriction \
+--authorization-mode=RBAC,Node \
+--enable-bootstrap-token-auth=true \
+--token-auth-file=/opt/kubernetes/cfg/token.csv \
+--service-node-port-range=30000-65535 \
+--tls-cert-file=/opt/kubernetes/ssl/server.pem  \
+--tls-private-key-file=/opt/kubernetes/ssl/server-key.pem \
+--client-ca-file=/opt/kubernetes/ssl/ca.pem \
+--service-account-key-file=/opt/kubernetes/ssl/ca-key.pem \
+--etcd-cafile=/opt/etcd/ssl/ca.pem \
+--etcd-certfile=/opt/etcd/ssl/server.pem \
+--etcd-keyfile=/opt/etcd/ssl/server-key.pem \
+--kubelet-client-certificate=/opt/kubernetes/ssl/server.pem \
+--kubelet-client-key=/opt/kubernetes/ssl/server-key.pem \
+--audit-log-maxage=30 \
+--audit-log-maxbackup=3 \
+--audit-log-maxsize=100 \
+--audit-log-path=/data/logs/kubernetes/k8s-audit.log" \
+--requestheader-client-ca-file=/opt/kubernetes/ssl/ca.pem \
+--requestheader-allowed-names=aggregator \
+--requestheader-extra-headers-prefix=X-Remote-Extra- \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--proxy-client-cert-file=/opt/kubernetes/ssl/proxy-client.pem \
+--proxy-client-key-file=/opt/kubernetes/ssl/proxy-client-key.pem \
+--runtime-config=api/all=true \
+--enable-aggregator-routing=true
+
+
+参考说明
+•	--logtostderr：启用日志
+•	---v：日志等级
+•	--log-dir：日志目录
+•	--etcd-servers：etcd集群地址
+•	--bind-address：监听地址
+•	--secure-port：https安全端口
+•	--advertise-address：集群通告地址
+•	--allow-privileged：启用授权
+•	--service-cluster-ip-range：Service虚拟IP地址段
+•	--enable-admission-plugins：准入控制模块
+•	--authorization-mode：认证授权，启用RBAC授权和节点自管理
+•	--enable-bootstrap-token-auth：启用TLS bootstrap机制
+•	--token-auth-file：bootstrap token文件
+•	--service-node-port-range：Service nodeport类型默认分配端口范围
+•	--kubelet-client-xxx：apiserver访问kubelet客户端证书
+•	--tls-xxx-file：apiserver https证书
+•	1.20版本必须加的参数：--service-account-issuer，--service-account-signing-key-file
+•	--etcd-xxxfile：连接Etcd集群证书
+•	--audit-log-xxx：审计日志
+•	启动聚合层相关配置：--requestheader-client-ca-file，--proxy-client-cert-file，--proxy-client-key-file，--requestheader-allowed-names，--requestheader-extra-headers-prefix，--requestheader-group-headers，--requestheader-username-headers，--enable-aggregator-routing
+
+#拷贝刚才生成的证书
+[root@k8s-master1 bin]# cp /opt/tls/k8s/ca*pem /opt/tls/k8s/server*pem /opt/kubernetes/ssl/
+```
+
+
+
+  ```shell
+  #配置token文件
+  [root@k8s-master1 bin]# vim /opt/kubernetes/cfg/token.csv
+  #####8e4908667d4d495dd8b9367aa1301317,kubelet-bootstrap,10001,"system:node-bootstrapper"
+  783e934d73901e0791216e591bd6636f,kubelet-bootstrap,10001,"system:kubelet-bootstrap"
+  
+  *注：上述token可自行生成替换，但一定要与后续配置对应
+  head -c 16 /dev/urandom | od -An -t x | tr -d ' '
+  ```
+
+**systemd管理apiserver**
+
+```shell
+[root@k8s-master1 bin]# vim /usr/lib/systemd/system/kube-apiserver.service
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+[Service]
+EnvironmentFile=/opt/kubernetes/cfg/kube-apiserver.conf
+ExecStart=/opt/kubernetes/bin/kube-apiserver $KUBE_APISERVER_OPTS
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target
+
+
+
+#启动并设置开机启动
+systemctl daemon-reload
+systemctl enable kube-apiserver
+systemctl start kube-apiserver
+```
+
+### 5、部署kube-controller-manager
+
+```shell
+#创建配置文件
+❯ cat /opt/kubernetes/cfg/kube-controller-manager.conf      
+KUBE_CONTROLLER_MANAGER_OPTS="--logtostderr=false \
+--v=2 \
+--log-dir=/data/logs/kubernetes/kube-controller-manager \
+--leader-elect=true \
+--master=127.0.0.1:8080 \
+--bind-address=127.0.0.1 \
+--allocate-node-cidrs=true \
+--cluster-cidr=10.244.0.0/16 \
+--service-cluster-ip-range=10.96.0.0/16 \
+--cluster-signing-cert-file=/opt/kubernetes/ssl/ca.pem \
+--cluster-signing-key-file=/opt/kubernetes/ssl/ca-key.pem  \
+--root-ca-file=/opt/kubernetes/ssl/ca.pem \
+--service-account-private-key-file=/opt/kubernetes/ssl/ca-key.pem \
+--experimental-cluster-signing-duration=87600h0m0s"
+
+
+
+
+
+
+
+参数说明
+•	--kubeconfig：连接apiserver配置文件
+•	--leader-elect：当该组件启动多个时，自动选举（HA）
+•	--cluster-signing-cert-file/--cluster-signing-key-file：自动为kubelet颁发证书的CA，与apiserver保持一致
+```
+
+
+
+```shell
+#生成kubeconfig文件
+[root@k8s-master1 k8s]# KUBE_CONFIG="/opt/kubernetes/cfg/kube-controller-manager.kubeconfig"
+[root@k8s-master1 k8s]# KUBE_APISERVER="https://192.168.1.20:6443"
+
+·终端执行（4条）
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config set-credentials kube-controller-manager \
+  --client-certificate=./kube-controller-manager.pem \
+  --client-key=./kube-controller-manager-key.pem \
+  --embed-certs=true \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kube-controller-manager \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config use-context default --kubeconfig=${KUBE_CONFIG}
+```
+
+systemd管理controller-manager
+
+```shell
+[root@k8s-master1 k8s]# vim /usr/lib/systemd/system/kube-controller-manager.service
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=/opt/kubernetes/cfg/kube-controller-manager.conf
+ExecStart=/usr/local/bin/kube-controller-manager $KUBE_CONTROLLER_MANAGER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+#启动并设置开机启动
+systemctl daemon-reload
+systemctl enable kube-controller-manager
+systemctl start kube-controller-manager
+```
+
+### 6、部署kube-scheduler
+
+```shell
+#创建配置文件
+[root@k8s-master1 k8s]# vim /opt/kubernetes/cfg/kube-scheduler.conf
+KUBE_SCHEDULER_OPTS="--logtostderr=false \
+--v=2 \
+--log-dir=/opt/kubernetes/logs \
+--leader-elect \
+--kubeconfig=/opt/kubernetes/cfg/kube-scheduler.kubeconfig \
+--bind-address=127.0.0.1"
+
+参数说明
+•	--kubeconfig：连接apiserver配置文件
+•	--leader-elect：当该组件启动多个时，自动选举（HA）
+```
+
+生成kubeconfig文件
+
+```shell
+[root@k8s-master1 k8s]# KUBE_CONFIG="/opt/kubernetes/cfg/kube-scheduler.kubeconfig"
+[root@k8s-master1 k8s]# KUBE_APISERVER="https://192.168.1.20:6443"
+
+
+·终端执行（4条）
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config set-credentials kube-scheduler \
+  --client-certificate=./kube-scheduler.pem \
+  --client-key=./kube-scheduler-key.pem \
+  --embed-certs=true \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kube-scheduler \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config use-context default --kubeconfig=${KUBE_CONFIG}
+
+```
+
+systemd管理scheduler
+
+```shell
+[root@k8s-master1 k8s]# vim /usr/lib/systemd/system/kube-scheduler.service
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=/opt/kubernetes/cfg/kube-scheduler.conf
+ExecStart=/opt/kubernetes/bin/kube-scheduler $KUBE_SCHEDULER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+#启动并设置开机启动
+systemctl daemon-reload
+systemctl enable kube-scheduler
+systemctl start kube-scheduler
+```
+
+查看集群状态
+
+```shell
+#生成kubeconfig文件
+[root@k8s-master1 k8s]# mkdir /root/.kube
+
+[root@k8s-master1 k8s]# KUBE_CONFIG="/root/.kube/config"
+[root@k8s-master1 k8s]# KUBE_APISERVER="https://192.168.1.20:6443"
+
+·终端执行（4条）
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config set-credentials cluster-admin \
+  --client-certificate=./admin.pem \
+  --client-key=./admin-key.pem \
+  --embed-certs=true \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=cluster-admin \
+  --kubeconfig=${KUBE_CONFIG}
+
+kubectl config use-context default --kubeconfig=${KUBE_CONFIG}
+
+
+#通过kubectl工具查看当前集群组件状态
+root@k8s-master1 k8s]# kubectl get cs
+Warning: v1 ComponentStatus is deprecated in v1.19+
+NAME                 STATUS    MESSAGE             ERROR
+scheduler            Healthy   ok                  
+controller-manager   Healthy   ok                  
+etcd-2               Healthy   {"health":"true"}   
+etcd-0               Healthy   {"health":"true"}   
+etcd-1               Healthy   {"health":"true"} 
+
+
+
+
+
+#若出现下列情况，可按下面操作
+[root@k8s-master1 k8s]# kubectl get cs
+NAME                 AGE
+etcd-0               <unknown>
+scheduler            <unknown>
+controller-manager   <unknown>
+etcd-2               <unknown>
+etcd-1               <unknown>
+
+#从1.16开始就显示为unknow 具体原因:https://segmentfault.com/a/1190000020912684
+
+
+#临时解决办法（通过模板）
+[root@k8s-master1 k8s]# kubectl get cs -o=go-template='{{printf "|NAME|STATUS|MESSAGE|\n"}}{{range .items}}{{$name := .metadata.name}}{{range .conditions}}{{printf "|%s|%s|%s|\n" $name .status .message}}{{end}}{{end}}'
+|NAME|STATUS|MESSAGE|
+|scheduler|True|ok|
+|controller-manager|True|ok|
+|etcd-1|True|{"health":"true"}|
+|etcd-0|True|{"health":"true"}|
+|etcd-2|True|{"health":"true"}|
+
+#查看k8s的名称空间
+[root@k8s-master1 k8s]# kubectl get ns
+NAME              STATUS   AGE
+default           Active   3h21m
+kube-node-lease   Active   3h21m
+kube-public       Active   3h21m
+kube-system       Active   3h21m
+```
 
 
 
@@ -577,7 +923,7 @@ fi
 CACERT="/opt/etcd/ssl/ca.pem"
 CERT="/opt/etcd/ssl/server.pem"
 EKY="/opt/etcd/ssl/server-key.pem"
-ENDPOINTS="172.28.28.8:2379"
+ENDPOINTS="10.102.4.13:2379"
 
 ETCDCTL_API=3 
 /opt/etcd/bin/etcdctl \
