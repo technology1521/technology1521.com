@@ -272,7 +272,7 @@ $ docker search my-image
 以下是一个用于对比本地镜像和Harbor仓库镜像差异的脚本示例，并将结果输出为txt文件：
 
 ```
-bashCopy code#!/bin/bash
+#!/bin/bash
 
 # 定义Harbor仓库地址和项目名称
 harbor_address="harbor.example.com"
@@ -333,14 +333,14 @@ echo "镜像差异检查完成，请查看 ${output_file}"
 保存脚本为一个文件（例如`compare_images.sh`），并使用以下命令将其设置为可执行文件：
 
 ```
-bashCopy code
+
 $ chmod +x compare_images.sh
 ```
 
 然后运行脚本即可对比本地镜像和Harbor仓库镜像的差异，并将结果输出为txt文件：
 
 ```
-bashCopy code
+
 $ ./compare_images.sh
 ```
 
@@ -357,7 +357,7 @@ $ ./compare_images.sh
 以下是一个定时清除本地`none`镜像的脚本示例，你可以使用cron任务来定期执行该脚本：
 
 ```
-bashCopy code#!/bin/bash
+#!/bin/bash
 
 # 清除本地none镜像
 docker rmi $(docker images -q --filter "dangling=true") &> /dev/null
@@ -366,14 +366,14 @@ docker rmi $(docker images -q --filter "dangling=true") &> /dev/null
 将上述脚本保存为一个文件（例如`cleanup_images.sh`），然后使用以下命令将其设置为可执行文件：
 
 ```
-bashCopy code
+
 $ chmod +x cleanup_images.sh
 ```
 
 接下来，使用cron任务来定期执行该脚本。打开cron表编辑器：
 
 ```
-bashCopy code
+
 $ crontab -e
 ```
 
