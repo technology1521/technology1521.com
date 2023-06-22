@@ -21,7 +21,7 @@ title_separator          : "blog"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "zhuangzhuang wang"
 description              : "Technology Changes Life, Learning Changes Yourself"
-url                      : "https://technology1521.github.io/technology1521.com" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://technology1521.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "/" # the subpath of your site, e.g. "/blog"
 repository               : "technology1521.github.io/technology1521.com" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : "/assets/images/500x300.png" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
