@@ -346,10 +346,6 @@ $ ./compare_images.sh
 
 请确保在运行脚本之前已经正确安装并配置了Docker，并且能够访问到指定的Harbor仓库。最后，你可以打开生成的txt文件以查看镜像差异信息。
 
-
-
-
-
 ## 6.定时清除本地`none`镜像
 
 
@@ -380,7 +376,6 @@ $ crontab -e
 在编辑器中添加以下行，以在每天凌晨3点清除本地`none`镜像：
 
 ```
-javascriptCopy code
 0 3 * * * /path/to/cleanup_images.sh
 ```
 
