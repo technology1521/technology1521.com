@@ -107,7 +107,7 @@ analytics:
 
 # Site Author
 author:
-  name             : "王壮壮"
+  name             : "  王壮壮  "
   avatar           : "/assets/images/zhuangzhuang.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "A constantly learning operations worker"
   location         : "HangZhou_CN"
@@ -120,9 +120,9 @@ author:
     - label: "Website"
       icon: "fas fa-fw fa-link"
       url: "https://technology1521.github.io/technology1521.com/"
-    #- label: "Twitter"
-    #  icon: "fab fa-fw fa-twitter-square"
-      # url: "https://twitter.com/"
+    - label: "CSDN"
+      #icon: "fab fa-fw fa-twitter-square"
+       url: "https://blog.csdn.net/qq_42704442?spm=1010.2135.3001.5343"
     #- label: "Facebook"
     #  icon: "fab fa-fw fa-facebook-square"
       # url: "https://facebook.com/"
